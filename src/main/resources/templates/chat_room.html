@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>도르마북 | 화상회의</title>
+    <!-- Latest minified Bootstrap & JQuery-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <!-- Custom styles for this template -->
+    <style>
+        .btn.active {
+            display: none;
+        }
+
+        .btn span:nth-of-type(1)  {
+            display: none;
+        }
+        .btn span:last-child  {
+            display: block;
+        }
+
+        .btn.active span:nth-of-type(1)  {
+            display: block;
+        }
+        .btn.active span:last-child  {
+            display: none;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="/css/main.css"/>
+</head>
+<body class="text-center">
+
+<!-- Begin page content -->
+<main role="main" class="container-fluid">
+    <h1>DormaBook Video-Chat Room</h1>
+    <input type="hidden" id="id" name="id" th:value="${id}"/>
+    <div class="col-lg-12 mb-3">
+        <!--        <div class="mb-3" th:text="'User: ' + ${uuid} + ' @ Room #' + ${id}">-->
+        <!--            Local User Id-->
+        <!--        </div>-->
+        <div class="row justify-content-around mb-3">
+            <div class="col-lg-6 mb-3">
+                <video id="local_video" autoplay muted playsinline></video>
+            </div>
+            <div class="col-lg-6 mb-3">
+                <video id="remote_video" autoplay playsinline></video>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3" style="padding: 0; position: absolute; bottom: 100px; width: 98%;">
+        <div class="d-flex justify-content-around mb-3">
+            <div id="buttons" class="row">
+                <div class="btn-group" role="group">
+                    <div class="mr-2" data-toggle="buttons">
+                        <label class="btn" id="video_off">
+                            <input type="radio" name="options" style="display:none;" autocomplete="off"><div style=" content: url(https://user-images.githubusercontent.com/73926856/171702721-e95d537e-9b93-4183-9350-b2ff4ccf8453.png); height: 4rem"></div>
+                        </label>
+                        <label class="btn active" id="video_on">
+                            <input type="radio" name="options" style="display:none" autocomplete="off" checked><div style=" content: url(https://user-images.githubusercontent.com/73926856/171702642-099ac4a4-9557-4b92-b7f1-54be9fdbe923.png); height: 4rem"></div>
+                        </label>
+                    </div>
+                    <div class="mr-2" data-toggle="buttons">
+                        <label class="btn" id="audio_off">
+                            <input type="radio" name="options" style="display:none" autocomplete="off"><div style=" content: url(https://user-images.githubusercontent.com/73926856/171702779-de2c8878-143e-4c5f-ac68-a90693ee9817.png); height: 4rem"></div>
+                        </label>
+                        <label class="btn active" id="audio_on">
+                            <input type="radio" name="options" style="display:none" autocomplete="off" checked><div style=" content: url(https://user-images.githubusercontent.com/73926856/171702825-442482bb-0d84-4e7b-896f-6e6fbe3a8251.png); height: 4rem"></div>
+                        </label>
+                    </div>
+                </div>
+
+                <!--<button type="button" class="btn btn-outline-success" id="audio" data-toggle="button">Audio</button>-->
+                <a th:href="@{/room/{id}/user/{uuid}/exit(id=${id},uuid=${uuid})}">
+                    <button type="button" class="btn" id="exit" name="exit" style="background-color: white; border: none; box-shadow: none;">
+                        <div style=" content: url(https://user-images.githubusercontent.com/73926856/171728915-b7a00c25-aa42-46b1-b915-d646c0d9f13a.png); height: 4rem"></div>
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+<script src="/js/webrtc_client.js"></script>
+</body>
+</html>

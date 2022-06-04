@@ -1,0 +1,24 @@
+##THYMELEAF DEVELOP
+spring:
+  thymeleaf:
+    cache: false
+
+  jpa:
+    generate-ddl: false
+    database: mysql
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+
+  config:
+    import: classpath:/application-aws.yml
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+
+logging:
+  level:
+    org.springframework: info
+    io.github.benkoff.webrtcss: debug
+
