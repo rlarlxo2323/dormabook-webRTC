@@ -8,6 +8,10 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 @EnableWebSocket
 public class Application {
 
+	static {
+		System.setProperty("spring.config.location", "classpath:/application.yml,classpath:/application-aws.yml");
+	}
+
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
