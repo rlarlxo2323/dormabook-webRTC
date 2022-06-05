@@ -1,4 +1,9 @@
 package io.github.dorma.webrtc.repository;
 
-public class ReportRepository {
+import io.github.dorma.webrtc.domain.file.Report;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ReportRepository extends JpaRepository<Report, Long> {
 }
