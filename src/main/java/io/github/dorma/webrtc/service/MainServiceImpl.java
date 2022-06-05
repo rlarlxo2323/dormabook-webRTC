@@ -61,7 +61,7 @@ public class MainServiceImpl implements MainService {
             if(room != null && uuid != null && !uuid.isEmpty()) {
                 logger.debug("User {} is going to join Room #{}", uuid, sid);
                 // open the chat room
-                modelAndView = new ModelAndView("chat_room", "id", sid);
+                modelAndView = new ModelAndView("video_chat_room", "id", sid);
                 modelAndView.addObject("uuid", uuid);
             }
         }

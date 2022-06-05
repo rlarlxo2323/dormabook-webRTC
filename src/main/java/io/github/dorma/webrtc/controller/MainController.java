@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @ControllerAdvice
-public class MainController {    
+public class MainController {
     private final MainService mainService;
     
     @Autowired
@@ -21,7 +21,7 @@ public class MainController {
         this.mainService = mainService;
     }
 
-    @GetMapping({"", "/", "/index", "/home", "/main"})
+    @GetMapping({"/video-chat"})
     public ModelAndView displayMainPage(final Long id, final String uuid) {
         return this.mainService.displayMainPage(id, uuid);
     }
