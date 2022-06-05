@@ -55,4 +55,7 @@ public class MainController {
     public ModelAndView displaySampleStreaming() {
         return new ModelAndView("streaming");
     }
+
+    @GetMapping("/aa")
+    public ModelAndView displayaa(){return new ModelAndView("mentee_transcript");}
 }
