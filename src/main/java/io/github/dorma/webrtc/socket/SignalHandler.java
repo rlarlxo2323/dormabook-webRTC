@@ -1,9 +1,9 @@
 package io.github.dorma.webrtc.socket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.dorma.webrtc.domain.Room;
-import io.github.dorma.webrtc.domain.RoomService;
-import io.github.dorma.webrtc.domain.WebSocketMessage;
+import io.github.dorma.webrtc.domain.video.Room;
+import io.github.dorma.webrtc.domain.video.RoomService;
+import io.github.dorma.webrtc.domain.video.WebSocketMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

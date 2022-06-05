@@ -1,4 +1,4 @@
-package io.github.dorma.webrtc.domain;
+package io.github.dorma.webrtc.domain.video;
 
 import io.github.dorma.webrtc.util.Parser;
 import org.springframework.beans.factory.annotation.Autowired;

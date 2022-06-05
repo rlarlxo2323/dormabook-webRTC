@@ -1,6 +1,6 @@
 package io.github.dorma.webrtc.repository;
 
-import io.github.dorma.webrtc.domain.ChatRoom;
+import io.github.dorma.webrtc.domain.chat.ChatRoom;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;

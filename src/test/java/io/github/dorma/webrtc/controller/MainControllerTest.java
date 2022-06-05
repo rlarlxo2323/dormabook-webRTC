@@ -1,6 +1,6 @@
 package io.github.dorma.webrtc.controller;
 
-import io.github.dorma.webrtc.domain.Room;
+import io.github.dorma.webrtc.domain.video.Room;
 import io.github.dorma.webrtc.service.MainService;
 import org.hamcrest.Matchers;
 import org.junit.Before;

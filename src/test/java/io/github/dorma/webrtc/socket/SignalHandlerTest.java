@@ -2,9 +2,9 @@ package io.github.dorma.webrtc.socket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import io.github.dorma.webrtc.domain.Room;
-import io.github.dorma.webrtc.domain.RoomService;
-import io.github.dorma.webrtc.domain.WebSocketMessage;
+import io.github.dorma.webrtc.domain.video.Room;
+import io.github.dorma.webrtc.domain.video.RoomService;
+import io.github.dorma.webrtc.domain.video.WebSocketMessage;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

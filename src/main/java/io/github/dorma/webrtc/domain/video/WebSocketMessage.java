@@ -1,4 +1,4 @@
-package io.github.dorma.webrtc.domain;
+package io.github.dorma.webrtc.domain.video;
 
 import java.util.Objects;
 

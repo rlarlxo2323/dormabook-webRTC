@@ -1,7 +1,7 @@
 package io.github.dorma.webrtc.service;
 
-import io.github.dorma.webrtc.domain.Room;
-import io.github.dorma.webrtc.domain.RoomService;
+import io.github.dorma.webrtc.domain.video.Room;
+import io.github.dorma.webrtc.domain.video.RoomService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package io.github.dorma.webrtc.service;
 
-import io.github.dorma.webrtc.domain.Room;
-import io.github.dorma.webrtc.domain.RoomService;
+import io.github.dorma.webrtc.domain.video.Room;
+import io.github.dorma.webrtc.domain.video.RoomService;
 import io.github.dorma.webrtc.util.Parser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

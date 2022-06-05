@@ -1,9 +1,8 @@
 package io.github.dorma.webrtc.socket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.dorma.webrtc.domain.ChatMessage;
-import io.github.dorma.webrtc.domain.ChatRoom;
-import io.github.dorma.webrtc.domain.Room;
+import io.github.dorma.webrtc.domain.chat.ChatMessage;
+import io.github.dorma.webrtc.domain.chat.ChatRoom;
 import io.github.dorma.webrtc.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

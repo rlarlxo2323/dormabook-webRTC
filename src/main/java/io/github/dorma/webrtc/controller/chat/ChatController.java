@@ -1,6 +1,6 @@
 package io.github.dorma.webrtc.controller.chat;
 
-import io.github.dorma.webrtc.domain.ChatRoom;
+import io.github.dorma.webrtc.domain.chat.ChatRoom;
 import io.github.dorma.webrtc.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
