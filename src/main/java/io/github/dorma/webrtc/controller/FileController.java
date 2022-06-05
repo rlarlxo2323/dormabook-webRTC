@@ -1,6 +1,6 @@
 package io.github.dorma.webrtc.controller;
 
-import io.github.dorma.webrtc.payload.UploadFileRes;
+import io.github.dorma.webrtc.payload.UploadTsFileRes;
 import io.github.dorma.webrtc.service.FileStorageService;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +14,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 public class FileController {
@@ -27,24 +24,18 @@ public class FileController {
     private FileStorageService fileStorageService;
 
     @PostMapping("/uploadFile")
-    public UploadFileRes uploadFile(@RequestParam("file")MultipartFile file){
-        String fileName = fileStorageService.storeFile(file);
+    public UploadTsFileRes uploadFile(@RequestParam("file")MultipartFile file){
+        String saveName = fileStorageService.storeFile(file);
+
+        String fileName = file.getOriginalFilename();
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/downloadFile/")
-                .path(fileName)
+                .path(saveName)
                 .toUriString();
 
-        return new UploadFileRes(fileName, fileDownloadUri,
+        return new UploadTsFileRes(fileName, saveName, fileDownloadUri,
                 file.getContentType(), file.getSize());
-    }
-
-    @PostMapping("/uploadMultipleFiles")
-    public List<UploadFileRes> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
-        return Arrays.asList(files)
-                .stream()
-                .map(file -> uploadFile(file))
-                .collect(Collectors.toList());
     }
 
     @GetMapping("/downloadFile/{fileName:.+}")
