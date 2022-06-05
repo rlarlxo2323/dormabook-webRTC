@@ -3,6 +3,10 @@ package io.github.dorma.webrtc.service;
 import io.github.dorma.webrtc.exception.FileStorageException;
 import io.github.dorma.webrtc.exception.MyFileNotFoundException;
 import io.github.dorma.webrtc.property.FileStorageProperties;
+import io.github.dorma.webrtc.repository.MenteeTranscriptRepository;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -18,8 +22,13 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
+@RequiredArgsConstructor
 @Service
 public class FileStorageService {
+    final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    MenteeTranscriptRepository menteeTsRepo;
 
     private final Path fileStorageLocation;
 

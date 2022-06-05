@@ -1,22 +1,22 @@
-package io.github.dorma.webrtc.payload;
+package io.github.dorma.webrtc.domain.file;
 
-import io.github.dorma.webrtc.domain.file.MenteeTranscript;
 import io.github.dorma.webrtc.domain.team.StudyRoom;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@Setter
-public class UploadTsFileReq {
-
+@NoArgsConstructor
+public class MenteeTranscriptReq {
+    private Long menteetsNo;
     private StudyRoom studyroom;
     private String menteetsFilename;
     private String menteetsFileroute;
     private String menteetsSavefilename;
 
     @Builder
-    public UploadTsFileReq( StudyRoom studyroom, String menteetsFilename, String menteetsFileroute, String menteetsSavefilename) {
+    public MenteeTranscriptReq(Long menteetsNo, StudyRoom studyroom, String menteetsFilename, String menteetsFileroute, String menteetsSavefilename) {
+        this.menteetsNo = menteetsNo;
         this.studyroom = studyroom;
         this.menteetsFilename = menteetsFilename;
         this.menteetsFileroute = menteetsFileroute;
@@ -25,6 +25,7 @@ public class UploadTsFileReq {
 
     public MenteeTranscript toEntity(){
         return MenteeTranscript.builder()
+                .menteetsNo(menteetsNo)
                 .studyroom(studyroom)
                 .menteetsFilename(menteetsFilename)
                 .menteetsFileroute(menteetsFileroute)
