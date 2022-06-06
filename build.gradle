@@ -48,6 +48,7 @@ dependencies {
 	runtimeOnly('mysql:mysql-connector-java:8.0.27')
 	annotationProcessor('org.projectlombok:lombok')
     testCompile('org.springframework.boot:spring-boot-starter-test')
+	implementation 'org.javassist:javassist:3.20.0-GA'
 }
 
 task unpack(type: Copy) {
