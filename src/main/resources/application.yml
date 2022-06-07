@@ -23,4 +23,5 @@ logging:
     io.github.benkoff.webrtcss: debug
 
 file:
-  upload-dir: /Users/bon/uploads
+  upload-dir: /var/www/uploads
+#  upload-dir: C:\dorma
