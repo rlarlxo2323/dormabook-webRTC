@@ -1,15 +1,19 @@
-package io.github.dorma.webrtc.domain.file;
+package io.github.dorma.webrtc.domain.file.report;
 
 import io.github.dorma.webrtc.domain.team.StudyRoom;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Getter
 @Entity
+@DynamicInsert
 @NoArgsConstructor
 @Component
 public class Report {
@@ -36,12 +40,21 @@ public class Report {
     @Column(nullable = false)
     private String reportSavefilename;
 
+    @Column(nullable = false, columnDefinition = "TIMESTAMP")
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    private Timestamp reportSaveat;
+
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
+    private String reportDownload;
+
     @Builder
-    public Report(Long reportNo, StudyRoom studyroom, String reportFilename, String reportFileroute, String reportSavefilename) {
+    public Report(Long reportNo, StudyRoom studyroom, String reportFilename, String reportFileroute, String reportSavefilename, Timestamp reportSaveat, String reportDownload) {
         this.reportNo = reportNo;
         this.studyroom = studyroom;
         this.reportFilename = reportFilename;
         this.reportFileroute = reportFileroute;
         this.reportSavefilename = reportSavefilename;
+        this.reportSaveat = reportSaveat;
+        this.reportDownload = reportDownload;
     }
 }

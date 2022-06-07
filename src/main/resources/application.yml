@@ -19,7 +19,7 @@ spring:
 logging:
   level:
     org.springframework: info
-    io.github.benkoff.webrtcss: debug
+    io.github.dorma.webrtc: debug
 
 file:
   upload-dir: /var/www/uploads

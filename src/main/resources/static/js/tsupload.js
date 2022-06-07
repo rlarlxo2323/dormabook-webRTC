@@ -5,12 +5,19 @@ var singleFileUploadInput = document.querySelector('#singleFileUploadInput');
 var singleFileUploadError = document.querySelector('#singleFileUploadError');
 var singleFileUploadSuccess = document.querySelector('#singleFileUploadSuccess');
 
+function getRoomNo(){
+    var url = window.location.href;
+    var arr = url.split("/");
+    return arr[4];
+}
+
 function uploadSingleFile(file) {
     var formData = new FormData();
     formData.append("file", file);
 
+    var roomNo = getRoomNo();
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/uploadFile");
+    xhr.open("POST", "/api/file/ts/uploadFile/"+roomNo);
 
     xhr.onload = function() {
         console.log(xhr.responseText);
@@ -21,6 +28,7 @@ function uploadSingleFile(file) {
             singleFileUploadSuccess.style.display = "block";
         } else {
             singleFileUploadSuccess.style.display = "none";
+            singleFileUploadError.style.display = "<P>200MB 초과되어 올리지 못합니다.</P>"
             singleFileUploadError.innerHTML = (response && response.message) || "Some Error Occurred";
         }
     }

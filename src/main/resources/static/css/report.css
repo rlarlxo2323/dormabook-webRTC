@@ -1,0 +1,12 @@
+.bluetop {
+    border-collapse: collapse;
+    border-top: 3px solid #168;
+}
+.bluetop th {
+    color: #168;
+    background: #f0f6f9;
+}
+.bluetop th, .bluetop td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}

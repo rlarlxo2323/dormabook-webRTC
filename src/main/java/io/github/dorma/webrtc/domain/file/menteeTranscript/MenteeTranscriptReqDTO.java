@@ -1,4 +1,4 @@
-package io.github.dorma.webrtc.domain.file;
+package io.github.dorma.webrtc.domain.file.menteeTranscript;
 
 import io.github.dorma.webrtc.domain.team.StudyRoom;
 import lombok.Builder;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class MenteeTranscriptReq {
+public class MenteeTranscriptReqDTO {
     private Long menteetsNo;
     private StudyRoom studyroom;
     private String menteetsFilename;
@@ -15,7 +15,7 @@ public class MenteeTranscriptReq {
     private String menteetsSavefilename;
 
     @Builder
-    public MenteeTranscriptReq(Long menteetsNo, StudyRoom studyroom, String menteetsFilename, String menteetsFileroute, String menteetsSavefilename) {
+    public MenteeTranscriptReqDTO(Long menteetsNo, StudyRoom studyroom, String menteetsFilename, String menteetsFileroute, String menteetsSavefilename) {
         this.menteetsNo = menteetsNo;
         this.studyroom = studyroom;
         this.menteetsFilename = menteetsFilename;

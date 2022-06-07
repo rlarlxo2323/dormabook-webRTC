@@ -1,4 +1,4 @@
-package io.github.dorma.webrtc.domain.file;
+package io.github.dorma.webrtc.domain.file.menteeTranscript;
 
 import io.github.dorma.webrtc.domain.team.StudyRoom;
 import lombok.Builder;
