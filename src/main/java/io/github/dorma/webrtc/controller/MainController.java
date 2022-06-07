@@ -1,8 +1,11 @@
 package io.github.dorma.webrtc.controller;
 
+import io.github.dorma.webrtc.repository.ChatRoomRepository;
+import io.github.dorma.webrtc.security.JwtTokenProvider;
 import io.github.dorma.webrtc.service.MainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,14 +14,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 @ControllerAdvice
 public class MainController {
     private final MainService mainService;
-    
+    private final JwtTokenProvider jwtTokenProvider;
+    private final ChatRoomRepository chatRoomRepository;
+
     @Autowired
-    public MainController(final MainService mainService) {
+    public MainController(final MainService mainService, JwtTokenProvider jwtTokenProvider, ChatRoomRepository chatRoomRepository) {
         this.mainService = mainService;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.chatRoomRepository = chatRoomRepository;
     }
 
     @GetMapping({"/video-chat"})
@@ -56,6 +65,14 @@ public class MainController {
         return new ModelAndView("streaming");
     }
 
-    @GetMapping("/aa")
-    public ModelAndView displayaa(){return new ModelAndView("mentee_transcript");}
+    @GetMapping("/study-room/{roomId}/{roomAddr}")
+    public String showStudyRoom(@PathVariable String roomId, @PathVariable String roomAddr, HttpServletRequest request, Model model){
+        String jwt = jwtTokenProvider.resolveToken(request);
+        chatRoomRepository.createChatRoom(roomAddr);
+        model.addAttribute("roomNo",roomId);
+        model.addAttribute("roomAddr",roomAddr);
+        model.addAttribute("sub","aaa1234");
+        model.addAttribute("accessToken", jwt);
+        return "chat_room";
+    }
 }

@@ -41,7 +41,8 @@
   </svg>
 </div>
 
-<div id = "chatroom" style = "overflow-y: auto; width:84%; height: 750px; margin-left: 12%;"></div>
+<div id = "chatroom" style = "overflow-y: auto; width:84%; height: 750px; margin-left: 12%;">
+</div>
 
 <div id="chat-bar"
      style="width : 84%; height: 15%; position: absolute; bottom: 0; border-top: solid 1px #d5dadb; margin-left: 12%; padding: 0.5%">
@@ -66,64 +67,248 @@
 <script src="/js/chat.js"></script>
 </body>
 <script th:inline = "javascript">
+
+  /*<![CDATA[*/
+  var nickname = [[${sub}]];
+  var roomAddr = [[${roomAddr}]];
+  var roomNo = [[${roomNo}]];
+  var token = [[${accessToken}]];
+  /*]]>*/
+
+  sessionStorage.setItem('jwt', token);
+
+  $(document).ready(function($) {
+    currentDate = new Date();
+    var year = currentDate.getFullYear();
+    var month = currentDate.getMonth() + 1;
+    var date = currentDate.getDate();
+
+    $.ajax({
+      url: "/api/chat/team-chat/" + roomNo,
+      type: "get",
+      contentType : 'application/json; charset=UTF-8',
+      beforeSend: function (xhr) {
+        xhr.setRequestHeader("Authorization", token);
+      },
+      success: function(data) {
+        loadChat(data);
+      },
+      error: function() {
+      },
+      async: false
+    })
+  });
+
   var webSocket;
-  var nickname = window.innerHeight;
-  /* <![CDATA[*/
-  var roomId = /*[[${room.roomId}]]*/;
   var isScrollUp = false;
-  var lastScrollTop;
-  var unreadCnt = 0;
-  /* ]]> */
+  var currentDate;
+
   connect();
+
   document.getElementById("send").addEventListener("click",function(){
-    send();
+    if(document.getElementById("message").value.replace(/\s|　/gi, "").length !== 0) {
+      insertChat();
+      send();
+    } else {
+      document.getElementById("message").value = "";
+    }
   })
 
   document.getElementById("message").addEventListener("keydown", function (){
     if (event.keyCode == 13)
       if (!event.shiftKey){
         event.preventDefault();
-        send();
+        if(document.getElementById("message").value.replace(/\s|　/gi, "").length !== 0) {
+          insertChat();
+          send();
+        } else {
+          document.getElementById("message").value = "";
+        }
       }
   })
 
+  function loadChat(data) {
+    var loadYear;
+    var loadMonth;
+    var loadDate;
+    var lastDay;
+
+    for(var i = 0; i < data.length; i++){
+      let chatDiv = document.createElement('div');
+      let chatDate = document.createElement('div');
+      let chatLog = document.createElement('div');
+      let byDateDiv = document.createElement('div');
+      let byDateContent = document.createElement('div');
+
+      var divStyle = "display: block; width: 60%;";
+      var dateStyle = "display: inline-block; color: #AAAAAA; margin-left: 3px; margin-right: 3px;";
+      var contentStyle = "display: inline-block; border-radius: 15px; padding: 7px 15px; margin-bottom: 10px; margin-top: 5px; background-color: #F2F2F2; color: black; max-width: 700px;";
+      var byDateDivStyle = "display: flex; justify-content: center; width: 100%; margin-bottom: 10px; margin-top: 5px;";
+      var byDateContentStyle = "display: inline-block; border-radius: 15px; padding: 7px 15px; background-color: #F2F2F2; color: black;";
+
+      byDateDiv.setAttribute("style", byDateDivStyle);
+      byDateContent.setAttribute("style", byDateContentStyle);
+
+      var createdAt = new Date(Date.parse(data[i].chatCreatedat));
+      loadYear = createdAt.getFullYear();
+      loadMonth = createdAt.getMonth() + 1;
+      loadDate = createdAt.getDate();
+
+      if(i === 0) {
+        byDateContent.innerText = loadYear + "년 " + loadMonth + "월 " + loadDate + "일";
+        byDateDiv.appendChild(byDateContent);
+        document.getElementById('chatroom').appendChild(byDateDiv);
+        var ld = loadYear+'-'+loadMonth+'-'+loadDate;
+        lastDay = new Date(ld);
+      } else{
+        var nd = loadYear+'-'+loadMonth+'-'+loadDate;
+        var newDay = new Date(nd);
+
+        if(lastDay.getTime() !== newDay.getTime()) {
+          byDateContent.innerText = loadYear + "년 " + loadMonth + "월 " + loadDate + "일";
+          byDateDiv.appendChild(byDateContent);
+          document.getElementById('chatroom').appendChild(byDateDiv);
+          lastDay = newDay;
+        }
+      }
+
+      var hours = createdAt.getHours();
+      var minutes = createdAt.getMinutes();
+      var ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+      var strTime = ampm + ' ' + hours + ':' + minutes;
+
+      chatDate.innerText = strTime;
+      chatLog.innerText = data[i].chatContent;
+
+      if (data[i].chatMemberid == nickname) {
+        divStyle += "text-align: right; float: right;"
+        contentStyle += "margin-right: 10px"
+        chatDiv.appendChild(chatDate);
+        chatDiv.appendChild(chatLog);
+      } else {
+        divStyle += "text-align: left; float: left;"
+        contentStyle += "margin-left: 10px"
+        chatDiv.appendChild(chatLog);
+        chatDiv.appendChild(chatDate);
+      }
+
+      chatDiv.setAttribute("style", divStyle);
+      chatDate.setAttribute("style", dateStyle);
+      chatLog.setAttribute("style", contentStyle);
+
+      document.getElementById('chatroom').appendChild(chatDiv);
+      if(i === data.length-1) {
+        var today = new Date();
+        if(lastDay.getTime() !== today.getTime()) {
+          byDateContent.innerText = today.getFullYear() + "년 " + (today.getMonth()+1) + "월 " + today.getDate() + "일";
+          byDateDiv.appendChild(byDateContent);
+          document.getElementById('chatroom').appendChild(byDateDiv);
+          lastDay = today;
+        }
+      }
+    }
+    $('#chatroom').animate({
+      scrollTop: chatroom.scrollHeight - chatroom.clientHeight
+    }, 100);
+  }
+
+  function insertChat(){
+    var msg = document.getElementById("message").value;
+    $.ajax({
+      url: "/api/chat/team-chat",
+      beforeSend: function (xhr) {
+        xhr.setRequestHeader("Authorization", token);
+      },
+      type: "post",
+      contentType : 'application/json; charset=UTF-8',
+      data: JSON.stringify({
+        chatMemberid : nickname,
+        chatContent : msg,
+        studyroomNo : roomNo
+      }),
+      datatype: "json"
+    })
+  }
+
+  function updateDate(){
+    var newCurDate = new Date();
+
+    var newYear = newCurDate.getFullYear();
+    var newMonth = newCurDate.getMonth() + 1;
+    var newDate = newCurDate.getDate();
+
+    if(currentDate.getDate() < newDate) {
+      let curDateDiv = document.createElement('div');
+      let curDate = document.createElement('div');
+      curDateDiv.setAttribute("style", "display: flex; justify-content: center; width: 100%; margin-bottom: 10px; margin-top: 5px;");
+      curDate.setAttribute("style", "display: inline-block; border-radius: 15px; padding: 7px 15px; background-color: #F2F2F2; color: black;");
+      curDate.innerText = newYear + "년 " + newMonth + "월 " + newDate + "일";
+      curDateDiv.appendChild(curDate);
+      document.getElementById('chatroom').appendChild(curDateDiv);
+      currentDate = newCurDate;
+    }
+  }
+
   function connect(){
-    webSocket = new WebSocket("ws://" + window.location.host + "/chat");
+    webSocket = new WebSocket("wss://" + window.location.host + "/chat");
     webSocket.onopen = onOpen;
     webSocket.onclose = onClose;
     webSocket.onmessage = onMessage;
   }
   function disconnect(){
-    webSocket.send(JSON.stringify({chatRoomId : roomId,type:'LEAVE',writer:nickname}));
+    webSocket.send(JSON.stringify({chatRoomId : roomAddr,type:'LEAVE',chatMemberid:nickname}));
     webSocket.close();
   }
   function send(){
     msg = document.getElementById("message").value;
-    webSocket.send(JSON.stringify({chatRoomId : roomId,type:'CHAT',writer:nickname,message : msg}));
+    webSocket.send(JSON.stringify({chatRoomId : roomAddr,type:'CHAT',chatMemberid:nickname,chatContent : msg}));
     document.getElementById("message").value = "";
   }
   function onOpen(){
-    webSocket.send(JSON.stringify({chatRoomId : roomId,type:'ENTER',writer:nickname}));
+    webSocket.send(JSON.stringify({chatRoomId : roomAddr,type:'ENTER',chatMemberid:nickname}));
   }
   function onMessage(e){
+    updateDate();
     let json = JSON.parse(e.data);
     let chatDiv = document.createElement('div');
-    var divStyle = "display: block;";
-    var logStyle = "display: inline-block; border-radius: 15px; padding: 7px 15px; margin-bottom: 10px; margin-top: 5px; background-color: #F2F2F2; color: black;";
+    let chatDate = document.createElement('div');
+    let chatLog = document.createElement('div');
 
-    if(json.writer == nickname) {
-      divStyle += "text-align: right"
-      logStyle += "margin-right: 10px"
+    var divStyle = "display: block; width: 60%;";
+    var dateStyle = "display: inline-block; color: #AAAAAA; margin-left: 3px; margin-right: 3px";
+    var contentStyle = "display: inline-block; border-radius: 15px; padding: 7px 15px; margin-bottom: 10px; margin-top: 5px; background-color: #F2F2F2; color: black; max-width: 700px;";
+
+    var createdAt = new Date(Date.parse(json.chatCreatedat));
+    var hours = createdAt.getHours();
+    var minutes = createdAt.getMinutes();
+    var ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    minutes = minutes < 10 ? '0'+minutes : minutes;
+    var strTime = ampm + ' ' + hours + ':' + minutes;
+
+    chatDate.innerText = strTime;
+    chatLog.innerText = json.chatContent;
+
+    if(json.chatMemberid == nickname) {
+      divStyle += "text-align: right; float: right;"
+      contentStyle += "margin-right: 10px"
+      chatDiv.appendChild(chatDate);
+      chatDiv.appendChild(chatLog);
     } else {
-      divStyle += "text-align: left;"
-      logStyle += "margin-left: 10px"
+      divStyle += "text-align: left; float: left;"
+      contentStyle += "margin-left: 10px"
+      chatDiv.appendChild(chatLog);
+      chatDiv.appendChild(chatDate);
     }
 
     chatDiv.setAttribute("style", divStyle);
-    let chatLog = document.createElement('div');
-    chatLog.setAttribute("style", logStyle);
-    chatLog.innerText = json.message;
-    chatDiv.appendChild(chatLog);
+    chatDate.setAttribute("style", dateStyle);
+    chatLog.setAttribute("style", contentStyle);
+
     document.getElementById('chatroom').appendChild(chatDiv);
     isScrollUp = false;
 
@@ -136,16 +321,14 @@
       isScrollUp = true;
     }
   }
+
   function onClose(){
     disconnect();
   }
 
   window.addEventListener('beforeunload', (event) => {
-    // 명세에 따라 preventDefault는 호출해야하며, 기본 동작을 방지합니다.
     event.preventDefault();
     disconnect();
-    // 대표적으로 Chrome에서는 returnValue 설정이 필요합니다.
-    event.returnValue = '';
   });
 </script>
 </html>
