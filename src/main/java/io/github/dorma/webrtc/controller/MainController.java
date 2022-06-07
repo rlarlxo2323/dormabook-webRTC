@@ -11,17 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @ControllerAdvice
@@ -75,21 +69,24 @@ public class MainController {
         return new ModelAndView("streaming");
     }
 
-    @GetMapping("/study-room/{roomId}/{roomAddr}")
-    public String showStudyRoom(@PathVariable String roomId, @PathVariable String roomAddr, HttpServletRequest request, Model model){
-        String jwt = jwtTokenProvider.resolveToken(request);
-        val jwtToken = jwt.substring(7);
+    @PostMapping("/study-room/{roomId}/{roomAddr}")
+    public String showStudyRoom(@PathVariable String roomId, @PathVariable String roomAddr, Model model, @RequestBody String jwt){
+        val jwtToken = jwt.substring(11);
+        val tokenRes = jwt.substring(4);
+
         chatRoomRepository.createChatRoom(roomAddr);
         model.addAttribute("roomNo",roomId);
         model.addAttribute("roomAddr",roomAddr);
         model.addAttribute("sub",jwtTokenProvider.getAuthentication(jwtToken).getName());
-        model.addAttribute("accessToken", jwt);
+        model.addAttribute("accessToken", tokenRes);
         return "chat_room";
     }
+
     @GetMapping("/study-room/{roomId}/mentee-ts")
     public ModelAndView displayMenteeTranscript(@PathVariable Long roomId, Model model){
         model.addAttribute("roomNo", roomId);
-        return new ModelAndView("mentee_transcript");}
+        return new ModelAndView("mentee_transcript");
+    }
 
     @GetMapping("/study-room/{roomId}/report")
     public ModelAndView displayReport(@PathVariable Long roomId, Model model){

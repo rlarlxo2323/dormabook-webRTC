@@ -1,6 +1,5 @@
 package io.github.dorma.webrtc.config;
 
-import io.github.dorma.webrtc.socket.ChatHandler;
 import io.github.dorma.webrtc.socket.SignalHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

@@ -6,6 +6,7 @@ import lombok.val;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -17,15 +18,18 @@ import java.io.IOException;
 
 @Slf4j
 @RequiredArgsConstructor
-public class JwtAuthenticationFilter extends GenericFilterBean {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 헤더에서 JWT 받아옴
         String token = jwtTokenProvider.resolveToken((HttpServletRequest) request);
-        HttpServletResponse httpResponse = (HttpServletResponse) response;
+
+        if(token == null) {
+            token = request.getParameter("jwt");
+        }
 
         // 유효한 토큰인지 확인
         if (token != null && token.startsWith("Bearer ")) {
@@ -37,11 +41,11 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } else {
-            log.debug("JWT Token does not begin with Bearer String");
+            HttpServletResponse httpResponse = (HttpServletResponse) response;
             httpResponse.sendRedirect("https://dormabook.shop/login");
             return;
         }
 
-        chain.doFilter(request, response);
+        filterChain.doFilter(request, response);
     }
 }
