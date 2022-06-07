@@ -71,7 +71,7 @@ public class MainController {
         chatRoomRepository.createChatRoom(roomAddr);
         model.addAttribute("roomNo",roomId);
         model.addAttribute("roomAddr",roomAddr);
-        model.addAttribute("sub","aaa1234");
+        model.addAttribute("sub",jwtTokenProvider.getAuthentication(jwt).getName());
         model.addAttribute("accessToken", jwt);
         return "chat_room";
     }
