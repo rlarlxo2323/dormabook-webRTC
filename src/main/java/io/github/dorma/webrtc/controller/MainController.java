@@ -3,6 +3,7 @@ package io.github.dorma.webrtc.controller;
 import io.github.dorma.webrtc.repository.ChatRoomRepository;
 import io.github.dorma.webrtc.security.JwtTokenProvider;
 import io.github.dorma.webrtc.service.MainService;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -68,10 +69,11 @@ public class MainController {
     @GetMapping("/study-room/{roomId}/{roomAddr}")
     public String showStudyRoom(@PathVariable String roomId, @PathVariable String roomAddr, HttpServletRequest request, Model model){
         String jwt = jwtTokenProvider.resolveToken(request);
+        val jwtToken = jwt.substring(7);
         chatRoomRepository.createChatRoom(roomAddr);
         model.addAttribute("roomNo",roomId);
         model.addAttribute("roomAddr",roomAddr);
-        model.addAttribute("sub",jwtTokenProvider.getAuthentication(jwt).getName());
+        model.addAttribute("sub",jwtTokenProvider.getAuthentication(jwtToken).getName());
         model.addAttribute("accessToken", jwt);
         return "chat_room";
     }
