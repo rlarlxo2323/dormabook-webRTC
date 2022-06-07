@@ -1,9 +1,12 @@
 package io.github.dorma.webrtc.controller;
 
+import io.github.dorma.webrtc.repository.ChatRoomRepository;
+import io.github.dorma.webrtc.security.JwtTokenProvider;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import io.github.dorma.webrtc.domain.file.report.Report;
 import io.github.dorma.webrtc.service.MainService;
 import io.github.dorma.webrtc.service.ReportProvider;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,16 +21,23 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 @ControllerAdvice
 public class MainController {
     private final MainService mainService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final ChatRoomRepository chatRoomRepository;
+
 
     @Autowired
     private ReportProvider reportProvider;
     @Autowired
-    public MainController(final MainService mainService) {
+    public MainController(final MainService mainService, JwtTokenProvider jwtTokenProvider, ChatRoomRepository chatRoomRepository) {
         this.mainService = mainService;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.chatRoomRepository = chatRoomRepository;
     }
 
     @GetMapping({"/video-chat"})
@@ -65,6 +75,17 @@ public class MainController {
         return new ModelAndView("streaming");
     }
 
+    @GetMapping("/study-room/{roomId}/{roomAddr}")
+    public String showStudyRoom(@PathVariable String roomId, @PathVariable String roomAddr, HttpServletRequest request, Model model){
+        String jwt = jwtTokenProvider.resolveToken(request);
+        val jwtToken = jwt.substring(7);
+        chatRoomRepository.createChatRoom(roomAddr);
+        model.addAttribute("roomNo",roomId);
+        model.addAttribute("roomAddr",roomAddr);
+        model.addAttribute("sub",jwtTokenProvider.getAuthentication(jwtToken).getName());
+        model.addAttribute("accessToken", jwt);
+        return "chat_room";
+    }
     @GetMapping("/study-room/{roomId}/mentee-ts")
     public ModelAndView displayMenteeTranscript(@PathVariable Long roomId, Model model){
         model.addAttribute("roomNo", roomId);

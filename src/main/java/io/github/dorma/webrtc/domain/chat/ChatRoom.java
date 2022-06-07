@@ -1,26 +1,25 @@
 package io.github.dorma.webrtc.domain.chat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.dorma.webrtc.repository.ChatRoomRepository;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 @Getter
 @Setter
 public class ChatRoom {
     private String roomId;
-    private String name;
     private Set<WebSocketSession> sessions = new HashSet<>();
 
-    public static ChatRoom create(String name){
+    public static ChatRoom create(String roomId) {
         ChatRoom chatRoom = new ChatRoom();
-        chatRoom.roomId = UUID.randomUUID().toString();
-        chatRoom.name = name;
+        chatRoom.roomId = roomId;
         return chatRoom;
     }
 
@@ -28,16 +27,17 @@ public class ChatRoom {
                               ObjectMapper objectMapper) throws IOException {
         if(chatMessage.getType() == MessageType.ENTER){
             sessions.add(session);
-            chatMessage.setMessage(chatMessage.getWriter() + "님이 접속하셨습니다.");
+            chatMessage.setChatContent(chatMessage.getChatMemberid() + "님이 접속하셨습니다.");
         }
         else if(chatMessage.getType() == MessageType.LEAVE){
             sessions.remove(session);
-            chatMessage.setMessage(chatMessage.getWriter() + "님임 퇴장하셨습니다.");
+            chatMessage.setChatContent(chatMessage.getChatMemberid() + "님임 퇴장하셨습니다.");
         }
         else{
-            chatMessage.setWriter(chatMessage.getWriter());
-            chatMessage.setMessage(chatMessage.getMessage());
+            chatMessage.setChatMemberid(chatMessage.getChatMemberid());
+            chatMessage.setChatContent(chatMessage.getChatContent());
         }
+        chatMessage.setChatCreatedat(LocalDateTime.now());
         send(chatMessage,objectMapper);
     }
 

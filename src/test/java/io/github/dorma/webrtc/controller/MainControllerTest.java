@@ -1,6 +1,8 @@
 package io.github.dorma.webrtc.controller;
 
 import io.github.dorma.webrtc.domain.video.Room;
+import io.github.dorma.webrtc.repository.ChatRoomRepository;
+import io.github.dorma.webrtc.security.JwtTokenProvider;
 import io.github.dorma.webrtc.service.MainService;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -32,6 +34,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class MainControllerTest {
     @Autowired private WebApplicationContext webApplicationContext;
     @Autowired private MainService mainService;
+    @Autowired private JwtTokenProvider jwtTokenProvider;
+    @Autowired private ChatRoomRepository chatRoomRepository;
     private MainController controller;
     private MockMvc mockMvc;
 
@@ -43,7 +47,7 @@ public class MainControllerTest {
 
     @Before
     public void setup() {
-        controller = new MainController(mainService);
+        controller = new MainController(mainService, jwtTokenProvider, chatRoomRepository);
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(webApplicationContext)
                 .build();

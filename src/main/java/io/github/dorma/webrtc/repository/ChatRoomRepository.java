@@ -15,19 +15,12 @@ public class ChatRoomRepository {
         chatRoomMap = new LinkedHashMap<>();
     }
 
-    public List<ChatRoom> findAllRoom(){
-        List chatRooms = new ArrayList<>(chatRoomMap.values());
-        Collections.reverse(chatRooms);
-        return chatRooms;
-    }
-
     public ChatRoom findRoomById(String id){
         return chatRoomMap.get(id);
     }
 
-    public ChatRoom createChatRoom(String name){
-        ChatRoom chatRoom = ChatRoom.create(name);
+    public void createChatRoom(String roomId){
+        ChatRoom chatRoom = ChatRoom.create(roomId);
         chatRoomMap.put(chatRoom.getRoomId(), chatRoom);
-        return chatRoom;
     }
 }

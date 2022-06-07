@@ -1,46 +1,43 @@
 package io.github.dorma.webrtc.controller.chat;
 
-import io.github.dorma.webrtc.domain.chat.ChatRoom;
+import io.github.dorma.webrtc.domain.chat.ChatMapping;
+import io.github.dorma.webrtc.domain.chat.ChatReq;
 import io.github.dorma.webrtc.repository.ChatRoomRepository;
-import lombok.RequiredArgsConstructor;
+import io.github.dorma.webrtc.service.ChatProvider;
+import io.github.dorma.webrtc.service.ChatService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @Controller
-@RequiredArgsConstructor
+@RequestMapping("/api/chat")
 public class ChatController {
-    private final ChatRoomRepository chatRoomRepository;
 
-    @GetMapping("/")
-    public String rooms(Model model){
-        model.addAttribute("rooms",chatRoomRepository.findAllRoom());
-        return "rooms";
+    @Autowired
+    private final ChatService chatService;
+    @Autowired
+    private final ChatProvider chatProvider;
+
+    public ChatController(ChatService chatService, ChatProvider chatProvider) {
+        this.chatService = chatService;
+        this.chatProvider = chatProvider;
     }
 
-    @GetMapping("/rooms/{id}")
-    public String room(@PathVariable String id, Model model){
-        ChatRoom room = chatRoomRepository.findRoomById(id);
-        model.addAttribute("room",room);
-        return "chat_room";
+    @ResponseBody
+    @PostMapping("/team-chat")
+    public void createChatLog(@RequestBody ChatReq chatReq){
+        chatService.createChatLog(chatReq);
     }
 
-    @GetMapping("/new")
-    public String make(Model model){
-        ChatRoomForm form = new ChatRoomForm();
-        model.addAttribute("form",form);
-        return "newRoom";
-    }
-
-    @PostMapping("/room/new")
-    public String makeRoom(ChatRoomForm form){
-        chatRoomRepository.createChatRoom(form.getName());
-
-        return "redirect:/";
+    @ResponseBody
+    @GetMapping("/team-chat/{roomId}")
+    public List<ChatMapping> getChatLog(@PathVariable Long roomId){
+        return chatProvider.getChatLog(roomId);
     }
 
 }

@@ -1,16 +1,14 @@
 package io.github.dorma.webrtc.domain.chat;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
-public class ChatMessage {
-    private String chatRoomId;
+@AllArgsConstructor
+public class ChatReq {
     private String chatMemberid;
     private String chatContent;
-    private LocalDateTime chatCreatedat;
-    private MessageType type;
+    private Long studyroomNo;
 }
