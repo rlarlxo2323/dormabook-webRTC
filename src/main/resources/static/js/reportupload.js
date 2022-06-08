@@ -47,12 +47,12 @@ singleUploadForm.addEventListener('submit', function(event){
 }, true);
 
 $("#score-btn").click(function () {
-    var roomNo = getRoomNo();
+    var roomNo = sessionStorage.getItem('roomNo');
     window.location.href = '/study-room/' + roomNo + '/mentee-ts';
 });
 
 $("#chat-btn").click(function () {
-    var roomNo = getRoomNo();
+    var roomNo = sessionStorage.getItem('roomNo');
     var addr = sessionStorage.getItem('addr');
     var jwt = sessionStorage.getItem('jwt');
 

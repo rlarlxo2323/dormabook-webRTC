@@ -18,7 +18,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @Repository
 public class MainServiceImpl implements MainService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private static final String REDIRECT = "redirect:/";
+    private static final String REDIRECT = "redirect:/video-chat";
     
     private final RoomService roomService;
     private final Parser parser;

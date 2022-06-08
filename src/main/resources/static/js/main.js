@@ -1,13 +1,6 @@
 $(function(){
     const uuidInput = document.querySelector('input#uuid');
 
-    function guid() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            let r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
-    }
-
     if (localStorage.getItem("uuid") === null) {
         localStorage.setItem("uuid", guid());
     }
@@ -22,3 +15,34 @@ function addUuidToButtonLink(button) {
     document.getElementById(id).href = ref + '/user/' + localStorage.getItem("uuid");
     console.log("link.href:" + document.getElementById(id).href);
 }
+
+$("#report-btn").click(function () {
+    var roomNo = sessionStorage.getItem('roomNo');
+    window.location.href = '/study-room/' + roomNo + '/report';
+});
+
+$("#score-btn").click(function () {
+    var roomNo = sessionStorage.getItem('roomNo');
+    window.location.href = '/study-room/' + roomNo + '/mentee-ts';
+});
+
+$("#chat-btn").click(function () {
+    var roomNo = sessionStorage.getItem('roomNo');
+    var addr = sessionStorage.getItem('addr');
+    var jwt = sessionStorage.getItem('jwt');
+
+    var url = '/study-room/' + roomNo + '/' + addr;
+
+    var form = document.createElement('form');
+    form.setAttribute('method', 'POST');
+    form.setAttribute('action', url);
+
+    var hiddenField = document.createElement('input');
+    hiddenField.setAttribute('type', 'hidden'); //값 입력
+    hiddenField.setAttribute('name', 'jwt');
+    hiddenField.setAttribute('value', jwt);
+    form.appendChild(hiddenField);
+
+    document.body.appendChild(form);
+    form.submit();
+});

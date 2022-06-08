@@ -8,10 +8,42 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
-    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/css/main.css"/>
 </head>
 <body class="text-center">
+
+<header class="w3-container" style="padding: 0; height: 60px;">
+    <div style="width:12%; height: 100%; border-right: solid 1px #d5dadb; border-bottom: solid 1px #d5dadb; float: left; text-align: center;">
+        <h2 style="font-family: 'Noto Sans KR', sans-serif;">도르마북</h2>
+    </div>
+
+    <div style="width:88%; height: 100%; border-right: solid 1px #d5dadb; border-bottom: solid 1px #d5dadb; float: left; padding-left: 50px;">
+        <h2 id="title" style="float:left;font-family: 'Noto Sans KR', sans-serif;">화상 회의</h2>
+    </div>
+</header>
+
+<!-- Left SideBar-->
+<div class="w3-sidebar w3-bar-block"
+     style="width:12%; border-right: solid 1px #d5dadb; font-family: 'Noto Sans KR', sans-serif; padding-left: 10px">
+    <a id="chat-btn" class="w3-bar-item w3-button">학습 채팅방</a>
+    <a id="report-btn" class="w3-bar-item w3-button">보고서 관리</a>
+    <a id="score-btn" class="w3-bar-item w3-button">성적 제출</a>
+</div>
+
+<!-- Right SideBar-->
+<div class="w3-sidebar w3-bar-block w3-xxlarge"
+     style="max-width:4%; min-width:60px; position:absolute; right:0; float:right; border-left: solid 1px #d2d2d2;">
+    <a id="video-btn" class="w3-bar-item w3-button">
+        <div style="content: url(https://user-images.githubusercontent.com/73810809/172592497-4a8a343d-00eb-4807-bd7e-1f6192bfe259.png); height: 3rem"></div>
+    </a>
+</div>
 
 <!-- Begin page content -->
 <main role="main" class="container">
@@ -54,6 +86,9 @@
 </main>
 
 <!--generates unique user identifier stored at 'uuid' input field to pass it to the back-side-->
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 <script src="/js/main.js"></script>
 </body>
 </html>
