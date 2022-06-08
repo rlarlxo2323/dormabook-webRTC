@@ -71,3 +71,7 @@ $("#chat-btn").click(function () {
     document.body.appendChild(form);
     form.submit();
 });
+
+$("#video-btn").click(function (){
+    window.location.href = '/video-chat';
+});
