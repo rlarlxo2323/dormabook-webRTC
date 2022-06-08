@@ -46,3 +46,28 @@ singleUploadForm.addEventListener('submit', function(event){
     event.preventDefault();
 }, true);
 
+$("#report-btn").click(function () {
+    var roomNo = getRoomNo();
+    window.location.href = '/study-room/' + roomNo + '/report';
+});
+
+$("#chat-btn").click(function () {
+    var roomNo = getRoomNo();
+    var addr = sessionStorage.getItem('addr');
+    var jwt = sessionStorage.getItem('jwt');
+
+    var url = '/study-room/' + roomNo + '/' + addr;
+
+    var form = document.createElement('form');
+    form.setAttribute('method', 'POST');
+    form.setAttribute('action', url);
+
+    var hiddenField = document.createElement('input');
+    hiddenField.setAttribute('type', 'hidden'); //값 입력
+    hiddenField.setAttribute('name', 'jwt');
+    hiddenField.setAttribute('value', jwt);
+    form.appendChild(hiddenField);
+
+    document.body.appendChild(form);
+    form.submit();
+});

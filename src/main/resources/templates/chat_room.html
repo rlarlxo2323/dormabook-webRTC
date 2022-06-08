@@ -75,6 +75,7 @@
   /*]]>*/
 
   sessionStorage.setItem('jwt', token);
+  sessionStorage.setItem('addr', roomAddr);
 
   $(document).ready(function($) {
     currentDate = new Date();
@@ -329,5 +330,14 @@
     event.preventDefault();
     disconnect();
   });
+
+  $("#report-btn").click(function () {
+    window.location.href = '/study-room/' + roomNo + '/report';
+  })
+
+  $("#score-btn").click(function () {
+    window.location.href = '/study-room/' + roomNo + '/mentee-ts';
+  })
+
 </script>
 </html>

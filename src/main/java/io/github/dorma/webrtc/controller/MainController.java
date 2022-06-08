@@ -74,9 +74,11 @@ public class MainController {
         String tokenRes = "";
         String token = "";
         if (!jwtToken.equals("")) {
+            tokenRes = jwtToken;
             token = jwtToken.substring(7);
         } else {
             token = jwtTokenProvider.resolveToken(httpServletRequest);
+            tokenRes = token;
             token = token.substring(7);
         }
 
