@@ -77,6 +77,13 @@
                 <video id="remote_video" autoplay playsinline></video>
             </div>
         </div>
+        <div class="row justify-content-center mb-3">
+            <div class="col-lg-4 mb-3">
+                <video id="shared_video" autoplay playsinline></video>
+            </div>
+        </div>
+
+
     </div>
 
     <div class="mb-3" style="padding: 0; position: absolute; bottom: 100px; width: 84%;">
@@ -89,6 +96,14 @@
                         </label>
                         <label class="btn active" id="video_on">
                             <input type="radio" name="options" style="display:none" autocomplete="off" checked><div style=" content: url(https://user-images.githubusercontent.com/73926856/171702642-099ac4a4-9557-4b92-b7f1-54be9fdbe923.png); height: 4rem"></div>
+                        </label>
+                    </div>
+                    <div class="mr-2" data-toggle="buttons">
+                        <label class="btn" id="shared_on">
+                            <input type="radio" name="options" style="display:none;" autocomplete="off" checked><div style=" content: url(https://user-images.githubusercontent.com/73926856/172699604-6690c009-43d4-41a7-84be-fbb0677b445e.png); height: 4rem"></div>
+                        </label>
+                        <label class="btn active" id="shared_off">
+                            <input type="radio" name="options" style="display:none" autocomplete="off"><div style=" content: url(https://user-images.githubusercontent.com/73926856/172699590-441ac17a-44be-477a-8300-ec50df0b7ccc.png); height: 4rem"></div>
                         </label>
                     </div>
                     <div class="mr-2" data-toggle="buttons">
@@ -115,39 +130,5 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 <script src="/js/webrtc_client.js"></script>
-<script th:inline = "javascript">
-
-    $("#report-btn").click(function () {
-        var roomNo = sessionStorage.getItem('roomNo');
-        window.location.href = '/study-room/' + roomNo + '/report';
-    });
-
-    $("#score-btn").click(function () {
-        var roomNo = sessionStorage.getItem('roomNo');
-        window.location.href = '/study-room/' + roomNo + '/mentee-ts';
-    });
-
-    $("#chat-btn").click(function () {
-        var roomNo = sessionStorage.getItem('roomNo');
-        var addr = sessionStorage.getItem('addr');
-        var jwt = sessionStorage.getItem('jwt');
-
-        var url = '/study-room/' + roomNo + '/' + addr;
-
-        var form = document.createElement('form');
-        form.setAttribute('method', 'POST');
-        form.setAttribute('action', url);
-
-        var hiddenField = document.createElement('input');
-        hiddenField.setAttribute('type', 'hidden'); //값 입력
-        hiddenField.setAttribute('name', 'jwt');
-        hiddenField.setAttribute('value', jwt);
-        form.appendChild(hiddenField);
-
-        document.body.appendChild(form);
-        form.submit();
-    });
-
-</script>
 </body>
 </html>

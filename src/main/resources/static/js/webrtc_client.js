@@ -7,10 +7,13 @@ const videoButtonOff = document.querySelector('#video_off');
 const videoButtonOn = document.querySelector('#video_on');
 const audioButtonOff = document.querySelector('#audio_off');
 const audioButtonOn = document.querySelector('#audio_on');
+const sharedButtonOff = document.querySelector('#shared_off');
+const sharedButtonOn = document.querySelector('#shared_on');
 const exitButton = document.querySelector('#exit');
 const localRoom = document.querySelector('input#id').value;
 const localVideo = document.getElementById('local_video');
 const remoteVideo = document.getElementById('remote_video');
+const sharedVideo = document.getElementById('shared_video');
 const localUserName = localStorage.getItem("uuid");
 
 // WebRTC STUN servers
@@ -167,6 +170,35 @@ audioButtonOn.onclick = () => {
     log('Audio On');
 };
 
+sharedButtonOn.onclick = () => {
+    navigator.mediaDevices.getUserMedia({
+        audio: true
+    }).then(function(audioStream){
+        //오디오 스트림을 얻어냄
+        navigator.mediaDevices.getDisplayMedia({
+            audio: true,
+            video: true
+        }).then(function(screenStream){
+            getSharedMediaStream(screenStream);
+            //스크린 공유 스트림을 얻어내고 여기에 오디오 스트림을 결합함
+            screenStream.addTrack(audioStream.getAudioTracks()[0]);
+        }).catch(function(e){
+            //error;
+        });
+    }).catch(function(e){
+        //error;
+    });
+    $(sharedVideo).css('display', 'inline');
+}
+
+sharedButtonOff.onclick = () => {
+    if (sharedVideo.srcObject) {
+        sharedVideo.srcObject.getTracks().forEach(track => track.stop());
+    }
+    $(sharedVideo).css('display', 'none');
+}
+
+
 // room exit button handler
 exitButton.onclick = () => {
     stop();
@@ -223,6 +255,12 @@ function createPeerConnection() {
 function getLocalMediaStream(mediaStream) {
     localStream = mediaStream;
     localVideo.srcObject = mediaStream;
+    localStream.getTracks().forEach(track => myPeerConnection.addTrack(track, localStream));
+}
+
+function getSharedMediaStream(mediaStream) {
+    localStream = mediaStream;
+    sharedVideo.srcObject = mediaStream;
     localStream.getTracks().forEach(track => myPeerConnection.addTrack(track, localStream));
 }
 
