@@ -5,7 +5,6 @@ import io.github.dorma.webrtc.security.JwtTokenProvider;
 import io.github.dorma.webrtc.domain.file.report.Report;
 import io.github.dorma.webrtc.service.MainService;
 import io.github.dorma.webrtc.service.ReportProvider;
-import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +22,6 @@ public class MainController {
     private final MainService mainService;
     private final JwtTokenProvider jwtTokenProvider;
     private final ChatRoomRepository chatRoomRepository;
-
 
     @Autowired
     private ReportProvider reportProvider;
@@ -70,14 +68,22 @@ public class MainController {
     }
 
     @PostMapping("/study-room/{roomId}/{roomAddr}")
-    public String showStudyRoom(@PathVariable String roomId, @PathVariable String roomAddr, Model model, @RequestBody String jwt){
-        val jwtToken = jwt.substring(11);
-        val tokenRes = jwt.substring(4);
+    public String showStudyRoom(@PathVariable String roomId, @PathVariable String roomAddr, Model model, HttpServletRequest httpServletRequest) {
+        String jwtToken = httpServletRequest.getParameter("jwt");
+
+        String tokenRes = "";
+        String token = "";
+        if (!jwtToken.equals("")) {
+            token = jwtToken.substring(7);
+        } else {
+            token = jwtTokenProvider.resolveToken(httpServletRequest);
+            token = token.substring(7);
+        }
 
         chatRoomRepository.createChatRoom(roomAddr);
-        model.addAttribute("roomNo",roomId);
-        model.addAttribute("roomAddr",roomAddr);
-        model.addAttribute("sub",jwtTokenProvider.getAuthentication(jwtToken).getName());
+        model.addAttribute("roomNo", roomId);
+        model.addAttribute("roomAddr", roomAddr);
+        model.addAttribute("sub", jwtTokenProvider.getAuthentication(token).getName());
         model.addAttribute("accessToken", tokenRes);
         return "chat_room";
     }

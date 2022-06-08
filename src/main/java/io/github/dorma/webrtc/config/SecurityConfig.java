@@ -1,6 +1,5 @@
 package io.github.dorma.webrtc.config;
 
-import io.github.dorma.webrtc.security.JwtAuthenticationFilter;
 import io.github.dorma.webrtc.security.JwtTokenProvider;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +10,6 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsUtils;
 
 @AllArgsConstructor
@@ -48,7 +46,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable().authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 // login 없이 접근 허용 하는 url
-                .antMatchers("/api/auth/**").permitAll()
+//                .antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/**").permitAll()
                 // '/admin'의 경우 ADMIN 권한이 있는 사용자만 접근이 가능
                 .antMatchers("/api/admin").hasRole("ADMIN")
                 // 그 외 모든 요청은 인증과정 필요
@@ -56,10 +55,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // 토큰 기반 인증이기 때문에 session 사용 x
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                //and()
                 // JwtAuthenticationFilter 는 UsernamePasswordAuthenticationFilter 전에 넣음
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+                //.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
