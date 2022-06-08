@@ -127,6 +127,10 @@ function stop() {
             navigator.mediaDevices.srcObject.getTracks().forEach(track => track.stop());
         }
 
+        if (sharedVideo.srcObject) {
+            sharedVideo.srcObject.getTracks().forEach(track => track.stop());
+        }
+
         remoteVideo.src = null;
         localVideo.src = null;
 
